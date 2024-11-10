@@ -15,8 +15,8 @@ export class DatVeController{
         @Body() bookTicketDto:BookTicketDto,
         @Res() res:Response<BookTicketDto>
     ){
-        let newBookingTicket = await this.datVeService.DatVe(bookTicketDto);
-        return res.status(HttpStatus.CREATED).json(newBookingTicket);
+            let newBookingTicket = await this.datVeService.DatVe(bookTicketDto);
+            return res.status(HttpStatus.CREATED).json(newBookingTicket);
     }
 
     @Get("/DatVe")
