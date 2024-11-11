@@ -10,19 +10,16 @@ export class DatVeController{
     constructor(
         private readonly datVeService:DatVeService
     ){}
+
+    //api dat ve
     @Post("/DatVe")
     async DatVe(
         @Body() bookTicketDto:BookTicketDto,
         @Res() res:Response<BookTicketDto>
-    ){
+    ):Promise<Response<BookTicketDto>>{
             let newBookingTicket = await this.datVeService.DatVe(bookTicketDto);
             return res.status(HttpStatus.CREATED).json(newBookingTicket);
     }
 
-    @Get("/DatVe")
-    async getTest(
-        @Res() res:Response
-    ){
-        return res.status(HttpStatus.OK).json("Hello");
-    }
+  
 }
