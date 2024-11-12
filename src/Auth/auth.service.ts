@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { AuthDto } from "./dto/auth.dto";
 import * as bcrypt from 'bcrypt';
 import { plainToClass } from "class-transformer";
+import { SignInDto } from "./dto/singin.dto";
 @Injectable()
 export class AuthService{
     prisma =new PrismaClient();
@@ -37,6 +38,14 @@ export class AuthService{
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
                 error: 'Something went wrong',
               }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async DangNhap(signInDto:SignInDto){
+        try {
+            
+        } catch (error) {
+            
         }
     }
 }
