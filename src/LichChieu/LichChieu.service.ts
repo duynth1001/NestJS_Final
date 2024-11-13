@@ -40,7 +40,6 @@ export class LichChieuService{
             return plainToClass(TaoLichChieuDto,newLichChieuRecord);
             
         } catch (error) {
-            console.log(error);
             
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,

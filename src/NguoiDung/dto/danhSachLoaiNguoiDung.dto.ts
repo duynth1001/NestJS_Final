@@ -4,3 +4,4 @@ export class danhSachLoaiNguoiDungDto{
     @Expose()
     loai_nguoi_dung:string;
 }
+
