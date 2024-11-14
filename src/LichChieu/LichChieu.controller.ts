@@ -33,4 +33,6 @@ export class LichChieuController{
         let newLichChieuRecord = await this.lichChieuService.TaoLichChieu(taoLichChieuDto);
         return res.status(HttpStatus.CREATED).json(newLichChieuRecord);
     }
+
+    
 }
