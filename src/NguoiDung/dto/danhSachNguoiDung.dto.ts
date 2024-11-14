@@ -1,4 +1,4 @@
-import { Expose } from "class-transformer";
+import { Exclude, Expose } from "class-transformer";
 
 export class DanhSachNguoiDungDto{
     @Expose()
@@ -12,7 +12,7 @@ export class DanhSachNguoiDungDto{
     @Expose()
     so_dt:string;
 
-    @Expose()
+    @Exclude()
     mat_khau:string;
 
     @Expose()

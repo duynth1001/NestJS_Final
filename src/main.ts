@@ -12,7 +12,14 @@ async function bootstrap() {
   .setTitle("API Movie ")
   .setDescription("Danh sach API Movie")
   .setVersion("1.0")
-  .addBearerAuth()
+  .addBearerAuth(
+    {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
+    'JWT-auth', // This name can be any identifier
+  )
   .build(); //builder pattern
   
   const swagger = SwaggerModule.createDocument(app,configSwagger);

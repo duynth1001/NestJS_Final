@@ -1,10 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { Body, Controller, HttpStatus, Post, Res, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { BookTicketDto } from "./dto/book-ticket.dto";
 import { Response } from "express";
 import { DatVeService } from "./DatVe.service";
+import { AuthGuard } from "src/Auth/auth.guard";
 
 @ApiTags("QuanLyDatVe")
+@ApiBearerAuth('JWT-auth')
 @Controller("QuanLyDatVe")
 export class DatVeController{
     constructor(
@@ -12,6 +14,7 @@ export class DatVeController{
     ){}
 
     //api dat ve
+    @UseGuards(AuthGuard)
     @Post("/DatVe")
     async DatVe(
         @Body() bookTicketDto:BookTicketDto,
