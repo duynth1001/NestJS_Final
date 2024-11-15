@@ -9,15 +9,36 @@ import {
   Res,
   HttpStatus,
   Query,
+  Headers,
+  HttpException,
+  UseGuards,
+  UseInterceptors,
+  UploadedFiles,
+  UploadedFile,
+  Put,
+  ParseFilePipeBuilder,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PhimService } from './phim.service';
-
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { danhSachBannerDto } from './dto/danhSachBanner.dto';
 import { danhSachPhimDto } from './dto/danhSachPhim.dto';
+import { AuthGuard } from 'src/Auth/auth.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { FilesUploadDto, UploadDTO } from './dto/upload.dto';
+import { getStorageOptions } from 'src/shared/upload.service';
+import { uploadImg } from 'src/config/upload';
+import { UpdatePhimDto } from './dto/phimUpdate.dto';
 
 @ApiTags('QuanLyPhim')
+@ApiBearerAuth('JWT-auth')
 @Controller('QuanLyPhim')
 export class PhimController {
   constructor(private readonly phimService: PhimService) {}
@@ -85,7 +106,7 @@ export class PhimController {
     return res.status(HttpStatus.OK).json(danhSachPhim);
   }
   @Get('LayThongTinPhim')
-  @ApiQuery({ name: 'maPhim', required: false, type:Number })
+  @ApiQuery({ name: 'maPhim', required: false, type: Number })
   async LayThongTinPhim(
     // @Query('maNhom') maNhom: string = 'GP01',
     @Query('maPhim') maPhim: number,
@@ -95,5 +116,44 @@ export class PhimController {
     let danhSachPhim = await this.phimService.LayThongTinPhim(maPhim);
     return res.status(HttpStatus.OK).json(danhSachPhim);
   }
-  
+
+  @UseGuards(AuthGuard)
+  @Delete('XoaPhim')
+  @ApiQuery({ name: 'maPhim', required: true, type: Number })
+  async xoaPhim(
+    @Query('maPhim') maPhim: number,
+    @Res() res: Response,
+  ): Promise<Response<danhSachPhimDto>> {
+    let xoaPhim = await this.phimService.XoaPhim(maPhim);
+    return res.status(HttpStatus.ACCEPTED).json(xoaPhim);
+  }
+
+  // @UseGuards(AuthGuard)
+  @Post('ThemPhimUploadHinh')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FilesUploadDto,
+    required: true,
+  })
+  @UseInterceptors(
+    FilesInterceptor('hinhAnh', 20, { storage: getStorageOptions('phim') }),
+  )
+  async themPhimUploadHinh(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Res() res: Response,
+  ): Promise<Response<FilesUploadDto>> {
+    // Gọi service để xử lý logic thêm phim
+    return await res.status(HttpStatus.OK).json(files);
+  }
+
+  @Put('CapNhatPhimUpload')
+  @UseInterceptors(uploadImg())
+  async updateMovie(
+    @Body() body: UpdatePhimDto,
+    @Res() res: Response,
+    @UploadedFile() hinhAnh: Express.Multer.File[],
+  ) {
+    let updatePhim = await this.phimService.updatePhim(body, hinhAnh);
+    return res.status(HttpStatus.ACCEPTED).json(updatePhim);
+  }
 }

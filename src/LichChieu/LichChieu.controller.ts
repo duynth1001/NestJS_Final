@@ -1,11 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Post, Query, Res } from "@nestjs/common";
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, HttpStatus, Post, Query, Res, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { LichChieuService } from "./LichChieu.service";
 import { Response } from "express";
 import { LichChieuDto } from "./dto/LichChieu.dto";
 import { TaoLichChieuDto } from "./dto/TaoLichChieu.dto";
+import { AuthGuard } from "src/Auth/auth.guard";
 
 @ApiTags("QuanLyDatVe")
+@ApiBearerAuth('JWT-auth')
 @Controller("QuanLyDatVe")
 export class LichChieuController{
     constructor(
@@ -25,6 +27,7 @@ export class LichChieuController{
     }
 
     //API tao lich chieu
+    @UseGuards(AuthGuard)
     @Post("/TaoLichChieu")
     async TaoLichChieu(
         @Body() taoLichChieuDto:TaoLichChieuDto,

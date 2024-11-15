@@ -1,13 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, Matches } from "class-validator";
-import { authEnum } from "../enum/auth.enum";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, Matches } from "class-validator";
+import { LoaiNguoiDungEnum } from "../enum/loainguoidung.enum";
 
-export class AuthDto{
+export class CapNhatNguoiDungDto{
 
-    @IsNotEmpty({message:'Ho ten khong duoc de trong'})
+    @IsNotEmpty({message:"Tai khoan khong duoc de trong"})
+    @IsNumber({},{message:"Tai khoan phai la dinh dang so"})
+    @ApiProperty()
+    tai_khoan:number;
+
+    @IsNotEmpty({message:"Ho ten khong duoc de trong"})
     @ApiProperty()
     ho_ten:string;
-
+ 
     @IsNotEmpty({message:"Email khong duoc de trong"})
     @IsEmail({},{message:"Vui long nhap dung dinh dang email"})
     @ApiProperty()
@@ -23,7 +28,7 @@ export class AuthDto{
     mat_khau:string;
 
     @IsNotEmpty({message:"Loai nguoi dung khong duoc de trong"})
-    @ApiProperty({enum:authEnum})
-    @IsEnum(authEnum)
+    @ApiProperty({enum:LoaiNguoiDungEnum})
+    @IsEnum(LoaiNguoiDungEnum)
     loai_nguoi_dung:string;
 }

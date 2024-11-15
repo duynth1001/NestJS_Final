@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {    IsNotEmpty, IsNumber, Matches } from "class-validator";
+import {    IsNotEmpty, IsNumber, Matches, Min } from "class-validator";
 
 export class TaoLichChieuDto{
     
@@ -22,6 +22,7 @@ export class TaoLichChieuDto{
 
     @IsNotEmpty({message:"Gia ve khong duoc de trong"})
     @IsNumber({},{message:"Gia ve phai la so"})
+    @Min(100000,{message:"Gia ve phai lon hon 100000"})
     @ApiProperty()
     gia_ve:number;
 }

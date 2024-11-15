@@ -4,6 +4,9 @@ import { plainToClass } from "class-transformer";
 import { danhSachLoaiNguoiDungDto } from "./dto/danhSachLoaiNguoiDung.dto";
 import { DanhSachNguoiDungDto } from "./dto/danhSachNguoiDung.dto";
 import { JwtService } from "@nestjs/jwt";
+import { ThemNguoiDungDto } from "./dto/ThemNguoiDung.dto";
+import * as bcrypt from 'bcrypt';
+import { CapNhatNguoiDungDto } from "./dto/capNhatNguoiDung.dto";
 @Injectable()
 export class NguoiDungService{
     constructor(
@@ -150,4 +153,125 @@ export class NguoiDungService{
         }
     }
    
+    async ThemNguoiDung(nguoiDung:ThemNguoiDungDto):Promise<DanhSachNguoiDungDto>
+    {
+        try {
+            let record = await this.prisma.nguoiDung.findFirst({
+                where:{
+                    email:nguoiDung.email
+                }
+            })
+            if (record) {
+                throw new HttpException('Email is already existed',HttpStatus.FORBIDDEN);
+            }
+            const hashPassword = await bcrypt.hash(nguoiDung.mat_khau,10);
+            const newRecord =await this.prisma.nguoiDung.create({
+                data:{
+                    ...nguoiDung,
+                    mat_khau:hashPassword
+                }
+            })
+            return plainToClass(DanhSachNguoiDungDto,newRecord);
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong',
+              }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async CapNhatThongTinNguoiDung(nguoiDung:CapNhatNguoiDungDto)
+    :Promise<DanhSachNguoiDungDto>
+    {
+        try {
+            let record = await this.prisma.nguoiDung.findFirst({
+                where:{
+                    tai_khoan:Number(nguoiDung.tai_khoan)
+                }
+            })
+            if (!record) {
+                throw new HttpException(`Khong tim thay nguoi dung voi tai khoan ${nguoiDung.tai_khoan}`,HttpStatus.FORBIDDEN);
+            }
+            const hashPassword = await bcrypt.hash(nguoiDung.mat_khau,10);
+           const nguoiDungUpdate= await this.prisma.nguoiDung.update({
+                data: {
+                    ...nguoiDung,
+                    mat_khau:hashPassword
+                },
+                where: {tai_khoan:record.tai_khoan}
+            })
+          
+            return plainToClass(DanhSachNguoiDungDto,nguoiDungUpdate);
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong',
+              }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async CapNhatThongTinNguoiDungPost(nguoiDung:CapNhatNguoiDungDto)
+    :Promise<DanhSachNguoiDungDto>
+    {
+        try {
+            let record = await this.prisma.nguoiDung.findFirst({
+                where:{
+                    tai_khoan:Number(nguoiDung.tai_khoan)
+                }
+            })
+            if (!record) {
+                throw new HttpException(`Khong tim thay nguoi dung voi tai khoan ${nguoiDung.tai_khoan}`,HttpStatus.FORBIDDEN);
+            }
+            const hashPassword = await bcrypt.hash(nguoiDung.mat_khau,10);
+           const nguoiDungUpdate= await this.prisma.nguoiDung.update({
+                data: {
+                    ...nguoiDung,
+                    mat_khau:hashPassword
+                },
+                where: {tai_khoan:record.tai_khoan}
+            })
+          
+            return plainToClass(DanhSachNguoiDungDto,nguoiDungUpdate);
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong',
+              }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async XoaNguoiDung(tai_khoan:number):Promise<DanhSachNguoiDungDto>{
+        try {
+            let record = await this.prisma.nguoiDung.findFirst({
+                where:{
+                    tai_khoan:Number(tai_khoan)
+                }
+            })
+            if (!record) {
+                throw new HttpException(`Khong tim thay nguoi dung voi tai khoan ${tai_khoan}`,HttpStatus.FORBIDDEN);
+            }
+            const deleteNguoiDung= await this.prisma.nguoiDung.delete({
+                where:{
+                    tai_khoan:Number(tai_khoan)
+                }
+            })
+            return plainToClass(DanhSachNguoiDungDto,deleteNguoiDung);
+        } catch (error) {
+           
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong',
+              }, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
