@@ -61,8 +61,12 @@ CREATE TABLE `LichChieu` (
   `ma_phim` int DEFAULT NULL,
   `ngay_gio_chieu` varchar(255) DEFAULT NULL,
   `gia_ve` int DEFAULT NULL,
-  PRIMARY KEY (`ma_lich_chieu`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`ma_lich_chieu`),
+  KEY `ma_phim` (`ma_phim`),
+  KEY `ma_rap` (`ma_rap`),
+  CONSTRAINT `LichChieu_ibfk_1` FOREIGN KEY (`ma_phim`) REFERENCES `Phim` (`ma_phim`) ON DELETE CASCADE,
+  CONSTRAINT `LichChieu_ibfk_2` FOREIGN KEY (`ma_rap`) REFERENCES `RapPhim` (`ma_rap`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `NguoiDung` (
   `tai_khoan` int NOT NULL AUTO_INCREMENT,
@@ -80,7 +84,7 @@ CREATE TABLE `Phim` (
   `trailer` varchar(255) DEFAULT NULL,
   `hinh_anh` varchar(255) DEFAULT NULL,
   `mo_ta` varchar(255) DEFAULT NULL,
-  `ngay_khoi_chieu` datetime DEFAULT NULL,
+  `ngay_khoi_chieu` varchar(255) DEFAULT NULL,
   `danh_gia` int DEFAULT NULL,
   `hot` tinyint(1) DEFAULT NULL,
   `dang_chieu` tinyint(1) DEFAULT NULL,
@@ -186,9 +190,7 @@ INSERT INTO `LichChieu` (`ma_lich_chieu`, `ma_rap`, `ma_phim`, `ngay_gio_chieu`,
 (8, 4, 5, '2024-11-13 18:30:00', 85000),
 (9, 5, 3, '2024-11-14 16:00:00', 90000),
 (10, 5, 4, '2024-11-14 21:00:00', 90000),
-(11, 2, 3, '2024-11-14 21:00:00', 1222),
-(12, 1, 3, '2024-11-14 21:00:00', 222000),
-(20, 1, 3, '2024-11-13 22:30:23', 222000);
+(12, 2, 1, '22/12/2024', 150000);
 
 INSERT INTO `NguoiDung` (`tai_khoan`, `ho_ten`, `email`, `so_dt`, `mat_khau`, `loai_nguoi_dung`) VALUES
 (1, 'Nguyen Van A', 'nguyenvana@example.com', '0901234567', 'password123', 'KhachHang');
