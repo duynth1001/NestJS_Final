@@ -220,7 +220,7 @@ export class PhimService {
         ten_phim: ten_phim || detailMovie.ten_phim,
         trailer: trailer || detailMovie.trailer,
         mo_ta: mo_ta || detailMovie.mo_ta,
-        ngay_khoi_chieu: ngay_khoi_chieu ? new Date(ngay_khoi_chieu) : detailMovie.ngay_khoi_chieu,
+        ngay_khoi_chieu: ngay_khoi_chieu ? ngay_khoi_chieu : detailMovie.ngay_khoi_chieu,
         danh_gia: danh_gia ? Number(danh_gia) : detailMovie.danh_gia,
         hot: hot ? hot.toString() === 'true' : detailMovie.hot,
         dang_chieu: dang_chieu ? dang_chieu.toString() === 'true' : detailMovie.dang_chieu,
