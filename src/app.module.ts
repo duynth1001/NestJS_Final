@@ -4,6 +4,8 @@ import { DatVeModule } from './DatVe/DatVe.module';
 import { LichChieuModule } from './LichChieu/LichChieu.module';
 import { NguoiDungModule } from './NguoiDung/NguoiDung.module';
 import { AuthModule } from './Auth/auth.module';
+import { PhimModule } from './phim/phim.module';
+import { RapModule } from './rap/rap.module';
 
 @Module({
   imports: [
@@ -11,7 +13,9 @@ import { AuthModule } from './Auth/auth.module';
     DatVeModule,
     LichChieuModule,
     NguoiDungModule,
-    AuthModule
+    AuthModule,
+    PhimModule,
+    RapModule
   ],
   controllers: [],
   providers: [],

@@ -264,7 +264,7 @@ export class NguoiDungService{
             })
             return plainToClass(DanhSachNguoiDungDto,deleteNguoiDung);
         } catch (error) {
-            
+           
             if (error instanceof HttpException) {
                 throw error;
             }
